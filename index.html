@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Blank Tape Scanner</title>
+<style>
+  :root{
+    --bg:#141210;
+    --panel:#211d19;
+    --panel2:#2a251f;
+    --line:#3a332b;
+    --accent:#e8792b;
+    --accent2:#f5b942;
+    --teal:#3fae9f;
+    --text:#f2ece2;
+    --muted:#9a8f80;
+    --ok:#6fbf73;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    min-height:100dvh;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  header{
+    padding:calc(14px + env(safe-area-inset-top)) 18px 12px;
+    display:flex;align-items:center;gap:12px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#1b1815,#141210);
+    position:sticky;top:0;z-index:5;
+  }
+  .logo{
+    width:42px;height:28px;border-radius:5px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    position:relative;
+  }
+  .logo::before,.logo::after{
+    content:"";position:absolute;top:9px;width:9px;height:9px;border-radius:50%;
+    background:var(--bg);border:2px solid #fff3;
+  }
+  .logo::before{left:6px}.logo::after{right:6px}
+  h1{font-size:1.05rem;font-weight:700;letter-spacing:.03em}
+  h1 small{display:block;font-size:.68rem;color:var(--muted);font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+  main{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+
+  .slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .slot{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:10px;display:flex;flex-direction:column;gap:8px;cursor:pointer;
+    transition:transform .08s ease;
+  }
+  .slot:active{transform:scale(.97)}
+  .slot .label{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .slot .check{color:var(--ok);font-size:.9rem;display:none}
+  .slot.done .check{display:inline}
+  .thumb{
+    aspect-ratio:100/63.5;border-radius:10px;overflow:hidden;position:relative;
+    background:var(--panel2);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .ph{color:var(--muted);font-size:.75rem;text-align:center;line-height:1.5;padding:8px}
+  .thumb .ph .cam{font-size:1.6rem;display:block;margin-bottom:2px}
+  .slot .retake{display:none;font-size:.72rem;color:var(--accent2);text-align:center;font-weight:600}
+  .slot.done .retake{display:block}
+
+  .hint{margin:14px 2px 0;font-size:.8rem;color:var(--muted);line-height:1.5;text-align:center}
+
+  section.card{
+    margin-top:18px;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--radius);padding:16px;
+  }
+  section.card h2{
+    font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);
+    margin-bottom:12px;font-weight:700;
+  }
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px;letter-spacing:.05em}
+  .field input,.field select{
+    width:100%;padding:12px 12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--text);font-size:16px;outline:none;
+    appearance:none;-webkit-appearance:none;
+  }
+  .field select{
+    background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a8f80' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;
+  }
+  .field input:focus,.field select:focus{border-color:var(--accent)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .btn{
+    appearance:none;border-radius:12px;padding:13px 10px;
+    font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;
+    color:var(--text);background:var(--panel2);border:1px solid var(--line);
+    transition:transform .08s ease;display:block;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),#d3641d);border:none;color:#fff}
+  .btn.teal{background:linear-gradient(135deg,var(--teal),#2d8a7d);border:none;color:#fff}
+  .btn.wide{grid-column:1/-1}
+  .btn small{display:block;font-weight:500;font-size:.68rem;opacity:.75;margin-top:2px}
+
+  details.more{margin-top:12px}
+  details.more summary{
+    cursor:pointer;font-size:.78rem;color:var(--accent2);font-weight:700;
+    letter-spacing:.05em;list-style:none;
+  }
+  details.more summary::-webkit-details-marker{display:none}
+  details.more summary::before{content:"▸ "}
+  details.more[open] summary::before{content:"▾ "}
+  .morelinks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .morelinks a{
+    font-size:.78rem;font-weight:600;color:var(--text);text-decoration:none;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:10px;text-align:center;
+  }
+
+  .note{font-size:.72rem;color:var(--muted);margin-top:10px;line-height:1.5}
+
+  /* ---------- collection ---------- */
+  #collList{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+  .collItem{
+    display:flex;gap:10px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:12px;padding:10px;align-items:center;
+  }
+  .collItem .pics{display:flex;gap:4px;flex:0 0 auto}
+  .collItem .pics img,.collItem .pics .nopic{
+    width:64px;height:41px;object-fit:cover;border-radius:6px;background:#1b1815;
+    display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);
+  }
+  .collItem .info{flex:1;min-width:0}
+  .collItem .info b{display:block;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .collItem .info span{font-size:.72rem;color:var(--muted)}
+  .collItem .acts{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+  .collItem .acts button{
+    background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;
+    font-size:.68rem;padding:5px 8px;cursor:pointer;font-weight:600;
+  }
+  .collItem .acts button.dl{color:var(--accent2);border-color:#5a4a2a}
+  #collEmpty{font-size:.78rem;color:var(--muted);text-align:center;padding:8px 0}
+
+  /* ---------- camera overlay ---------- */
+  #camView{position:fixed;inset:0;background:#000;z-index:50;display:none;flex-direction:column}
+  #camView.open{display:flex}
+  .camStage{position:relative;flex:1;overflow:hidden}
+  #video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .frameLayer{position:absolute;inset:0;pointer-events:none}
+  .frameLayer .dim{position:absolute;background:rgba(0,0,0,.55)}
+  #guide{
+    position:absolute;border:3px solid var(--accent2);border-radius:12px;
+    box-shadow:0 0 0 2px rgba(0,0,0,.4);
+  }
+  #guide::before{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:42%;aspect-ratio:1/0.62;border:2px dashed rgba(245,185,66,.5);border-radius:999px;
+  }
+  #guide .corner{position:absolute;width:22px;height:22px;border-color:var(--accent2);border-style:solid;border-width:0}
+  #guide .tl{top:-3px;left:-3px;border-top-width:5px;border-left-width:5px;border-top-left-radius:12px}
+  #guide .tr{top:-3px;right:-3px;border-top-width:5px;border-right-width:5px;border-top-right-radius:12px}
+  #guide .bl{bottom:-3px;left:-3px;border-bottom-width:5px;border-left-width:5px;border-bottom-left-radius:12px}
+  #guide .br{bottom:-3px;right:-3px;border-bottom-width:5px;border-right-width:5px;border-bottom-right-radius:12px}
+  .camLabel{
+    position:absolute;left:0;right:0;text-align:center;color:#fff;
+    font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.85rem;
+    text-shadow:0 1px 4px #000;
+  }
+  .camLabel span{background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px}
+  .camBar{
+    background:#000;padding:14px 20px calc(18px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .camBar .side{width:80px;color:#bbb;font-size:.8rem;background:none;border:none;font-weight:600;cursor:pointer}
+  #shutter{
+    width:70px;height:70px;border-radius:50%;border:5px solid #fff;background:var(--accent);
+    cursor:pointer;transition:transform .08s ease;
+  }
+  #shutter:active{transform:scale(.9)}
+
+  /* ---------- crop adjust view ---------- */
+  #cropView{position:fixed;inset:0;background:#000;z-index:60;display:none;flex-direction:column}
+  #cropView.open{display:flex}
+  .cropStage{position:relative;flex:1;overflow:hidden;touch-action:none}
+  #cropImg{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;user-select:none;-webkit-user-drag:none;pointer-events:none}
+  .cropStage .frameLayer{z-index:2}
+  #cropGuide{
+    position:absolute;border:3px solid var(--accent2);border-radius:12px;
+    box-shadow:0 0 0 2px rgba(0,0,0,.4);
+  }
+  .cropHint{
+    position:absolute;left:0;right:0;text-align:center;color:#fff;font-size:.8rem;
+    font-weight:600;text-shadow:0 1px 4px #000;z-index:3;
+  }
+  .cropHint span{background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px}
+  .cropBar{
+    background:#000;padding:14px 20px calc(18px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .cropBar .side{width:90px;color:#bbb;font-size:.85rem;background:none;border:none;font-weight:600;cursor:pointer}
+  #cropOk{
+    background:linear-gradient(135deg,var(--accent),#d3641d);color:#fff;border:none;
+    border-radius:999px;padding:14px 34px;font-size:.95rem;font-weight:700;cursor:pointer;
+  }
+
+  /* ---------- landscape: controls move to the side, frame gets bigger ---------- */
+  @media (orientation: landscape){
+    #camView.open,#cropView.open{flex-direction:row}
+    .camBar,.cropBar{
+      flex-direction:column-reverse;justify-content:center;gap:26px;
+      width:118px;padding:14px calc(10px + env(safe-area-inset-right)) 14px 10px;
+    }
+    .camBar .side,.cropBar .side{width:auto;text-align:center !important}
+    #cropOk{padding:14px 16px;font-size:.85rem}
+  }
+
+  #toast{
+    position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);
+    background:#000c;color:#fff;padding:10px 18px;border-radius:999px;font-size:.8rem;
+    opacity:0;pointer-events:none;transition:all .25s ease;z-index:99;white-space:nowrap;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"></div>
+  <h1>Blank Tape Scanner<small>Front &amp; back capture · model lookup</small></h1>
+</header>
+
+<main>
+  <div class="slots">
+    <div class="slot" id="slotFront" onclick="openCamera('front')">
+      <div class="label"><span>Front</span><span class="check">✓ saved</span></div>
+      <div class="thumb" id="thumbFront">
+        <div class="ph"><span class="cam">📷</span>Tap to photograph<br>the front</div>
+      </div>
+      <div class="retake">Tap to retake</div>
+    </div>
+    <div class="slot" id="slotBack" onclick="openCamera('back')">
+      <div class="label"><span>Back</span><span class="check">✓ saved</span></div>
+      <div class="thumb" id="thumbBack">
+        <div class="ph"><span class="cam">📷</span>Tap to photograph<br>the back</div>
+      </div>
+      <div class="retake">Tap to retake</div>
+    </div>
+  </div>
+
+  <p class="hint">Line the cassette up inside the orange frame and tap the shutter.<br>The photo is cropped to the frame automatically.</p>
+
+  <section class="card">
+    <h2>Tape details</h2>
+    <div class="row2">
+      <div class="field">
+        <label for="brand">Brand</label>
+        <input id="brand" type="text" placeholder="TDK" autocomplete="off" list="brandList">
+        <datalist id="brandList">
+          <option>TDK</option><option>Maxell</option><option>BASF</option><option>Sony</option>
+          <option>Agfa</option><option>Fuji</option><option>Denon</option><option>That's</option>
+          <option>Memorex</option><option>Scotch / 3M</option><option>Philips</option><option>JVC</option>
+        </datalist>
+      </div>
+      <div class="field">
+        <label for="model">Model</label>
+        <input id="model" type="text" placeholder="SA, XLII-S, Chrome Extra…" autocomplete="off">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="len">Length</label>
+        <select id="len">
+          <option value="">—</option>
+          <option>C46</option><option>C50</option><option>C54</option><option>C60</option>
+          <option>C64</option><option>C74</option><option>C90</option><option>C100</option>
+          <option>C110</option><option>C120</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="type">Tape type</label>
+        <select id="type">
+          <option value="">—</option>
+          <option value="Type I">Type I · Ferric</option>
+          <option value="Type II">Type II · Chrome/CrO₂</option>
+          <option value="Type III">Type III · FeCr</option>
+          <option value="Type IV">Type IV · Metal</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="cond">Condition</label>
+      <select id="cond">
+        <option value="">—</option>
+        <option>Sealed</option>
+        <option>Opened, unused</option>
+        <option>Used</option>
+        <option>Worn / for parts</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Web lookup</h2>
+    <div class="btns" style="margin-top:0">
+      <a class="btn teal" id="qEbay" target="_blank" rel="noopener">eBay sold<small>market value</small></a>
+      <a class="btn" id="qTapedeck" target="_blank" rel="noopener">Tapedeck.org<small>visual archive</small></a>
+      <a class="btn" id="qTardis" target="_blank" rel="noopener">Tape Tardis<small>blank tape index</small></a>
+      <a class="btn" id="q45" target="_blank" rel="noopener">45spaces<small>cassette database</small></a>
+    </div>
+    <details class="more">
+      <summary>More archives &amp; forums</summary>
+      <div class="morelinks">
+        <a id="qVintage" target="_blank" rel="noopener">Vintage Cassettes</a>
+        <a id="qTapeheads" target="_blank" rel="noopener">Tapeheads forum</a>
+        <a id="qAudiochrome" target="_blank" rel="noopener">Audiochrome tests</a>
+        <a id="qAgfaBasf" target="_blank" rel="noopener">AgfaBasf catalog</a>
+        <a id="qComeback" target="_blank" rel="noopener">Cassette Comeback</a>
+        <a id="qGoogle" target="_blank" rel="noopener">Google</a>
+      </div>
+    </details>
+    <p class="note">Searches use the brand, model and length above and open in a new tab. Tapedeck.org, Tape Tardis and 45spaces are best for identifying the exact generation by shell design; eBay sold listings show real value (sealed condition is added to the eBay search automatically when selected).</p>
+  </section>
+
+  <section class="card">
+    <h2>Collection</h2>
+    <div class="btns" style="margin-top:0">
+      <button class="btn primary wide" onclick="addToCollection()">＋ Add this tape to collection<small>saves photos + details below</small></button>
+    </div>
+    <div id="collList"></div>
+    <div id="collEmpty">No tapes added yet.</div>
+    <div class="btns">
+      <button class="btn" onclick="downloadCard(null)">Tape card<small>current tape as image</small></button>
+      <button class="btn" onclick="downloadCSV()">CSV list<small>collection details</small></button>
+    </div>
+    <p class="note">Everything stays on your device — nothing is uploaded. The collection lives in memory for this session, so download your cards and CSV before closing the page.</p>
+  </section>
+</main>
+
+<!-- camera view -->
+<div id="camView">
+  <div class="camStage" id="camStage">
+    <video id="video" autoplay playsinline muted></video>
+    <div class="frameLayer">
+      <div class="dim" id="dimT"></div><div class="dim" id="dimB"></div>
+      <div class="dim" id="dimL"></div><div class="dim" id="dimR"></div>
+      <div id="guide">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+      </div>
+      <div class="camLabel" id="camLabel" style="top:calc(14px + env(safe-area-inset-top))"><span>Front of tape</span></div>
+    </div>
+  </div>
+  <div class="camBar">
+    <button class="side" onclick="closeCamera()">Cancel</button>
+    <button id="shutter" aria-label="Take photo"></button>
+    <button class="side" style="text-align:right" onclick="pickFile()">Photo<br>library</button>
+  </div>
+</div>
+
+<!-- crop adjust view (used after the phone's camera app / photo picker) -->
+<div id="cropView">
+  <div class="cropStage" id="cropStage">
+    <img id="cropImg" alt="">
+    <div class="frameLayer">
+      <div class="dim" id="cdimT"></div><div class="dim" id="cdimB"></div>
+      <div class="dim" id="cdimL"></div><div class="dim" id="cdimR"></div>
+      <div id="cropGuide"></div>
+    </div>
+    <div class="cropHint" style="top:calc(14px + env(safe-area-inset-top))"><span id="cropHintText">Drag &amp; pinch to fit the tape in the frame</span></div>
+  </div>
+  <div class="cropBar">
+    <button class="side" onclick="closeCrop()">Cancel</button>
+    <button id="cropOk">Use photo</button>
+    <button class="side" style="text-align:right" onclick="pickFile()">Retake</button>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" capture="environment" hidden>
+<canvas id="workCanvas" hidden></canvas>
+<div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var CASSETTE_RATIO = 100/63.5;            // standard cassette shell: 100 × 63.5 mm
+  var state = { front:null, back:null };
+  var collection = [];                       // in-memory only
+  var currentSide = "front";
+  var stream = null;
+
+  var video   = document.getElementById("video");
+  var camView = document.getElementById("camView");
+  var stage   = document.getElementById("camStage");
+  var guide   = document.getElementById("guide");
+  var fileInput = document.getElementById("fileInput");
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---------- toast ---------- */
+  var toastTimer=null;
+  function toast(msg){
+    var t=$("toast");
+    t.textContent=msg; t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){t.classList.remove("show")},2200);
+  }
+
+  /* ---------- landscape helpers ---------- */
+  // A cassette is wider than tall — landscape gives a much bigger frame.
+  // On Android we go fullscreen + lock to landscape while framing; on iOS
+  // (no lock API) the layout simply adapts when the phone is rotated.
+  function goLandscape(el){
+    try{ if(el.requestFullscreen) el.requestFullscreen().catch(function(){}); }catch(e){}
+    try{
+      if(screen.orientation && screen.orientation.lock)
+        screen.orientation.lock("landscape").catch(function(){});
+    }catch(e){}
+  }
+  function leaveLandscape(){
+    try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
+    try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){}
+  }
+  window.addEventListener("orientationchange",function(){
+    setTimeout(function(){
+      if(camView.classList.contains("open")) layoutGuide();
+      if(cropView && cropView.classList.contains("open")){ layoutCropGuide(); fitCropImage(); }
+    },300);
+  });
+
+  /* ---------- guide layout ---------- */
+  var guideRect = {x:0,y:0,w:0,h:0};
+  function layoutGuide(){
+    var cw = stage.clientWidth, ch = stage.clientHeight;
+    var cap = cw>ch ? 0.74 : 0.6;            // landscape → bigger frame
+    var w = Math.min(cw*0.88, cw>ch ? 760 : 520);
+    var h = w/CASSETTE_RATIO;
+    if(h > ch*cap){ h = ch*cap; w = h*CASSETTE_RATIO; }
+    var x=(cw-w)/2, y=(ch-h)/2 - ch*0.04;
+    guideRect={x:x,y:y,w:w,h:h};
+    guide.style.left=x+"px"; guide.style.top=y+"px";
+    guide.style.width=w+"px"; guide.style.height=h+"px";
+    setRect("dimT",0,0,cw,y);
+    setRect("dimB",0,y+h,cw,ch-y-h);
+    setRect("dimL",0,y,x,h);
+    setRect("dimR",x+w,y,cw-x-w,h);
+  }
+  function setRect(id,x,y,w,h){
+    var el=$(id);
+    el.style.left=x+"px"; el.style.top=y+"px";
+    el.style.width=Math.max(0,w)+"px"; el.style.height=Math.max(0,h)+"px";
+  }
+  window.addEventListener("resize",function(){ if(camView.classList.contains("open")) layoutGuide(); });
+
+  /* ---------- camera ---------- */
+  var liveCameraBlocked = false;   // remembered after first failure
+  window.openCamera = function(side){
+    currentSide = side;
+    // Live in-page camera needs a secure (https) context. Opened as a local file
+    // or inside an app preview, Android/iOS block it — use the phone's own
+    // camera app instead, then the crop screen provides the framing.
+    if(liveCameraBlocked || !window.isSecureContext ||
+       !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      pickFile(); return;
+    }
+    document.querySelector("#camLabel span").textContent = (side==="front"?"Front":"Back")+" of tape";
+    camView.classList.add("open");
+    goLandscape(camView);
+    layoutGuide();
+    navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:{ideal:"environment"}, width:{ideal:1920}, height:{ideal:1080} },
+      audio:false
+    }).then(function(s){
+      stream=s; video.srcObject=s;
+      var p = video.play(); if(p && p.catch) p.catch(function(){});
+      setTimeout(layoutGuide,150);
+    }).catch(function(){
+      liveCameraBlocked = true;
+      toast("Opening your camera app instead");
+      closeCamera(); pickFile();
+    });
+  };
+
+  window.closeCamera = function(){
+    camView.classList.remove("open");
+    leaveLandscape();
+    if(stream){ stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
+    video.srcObject=null;
+  };
+
+  $("shutter").addEventListener("click", capture);
+
+  function capture(){
+    if(!stream || !video.videoWidth){ toast("Camera not ready yet"); return; }
+    var vw=video.videoWidth, vh=video.videoHeight;
+    var cw=stage.clientWidth, ch=stage.clientHeight;
+    var scale=Math.max(cw/vw, ch/vh);
+    var offX=(vw*scale-cw)/2, offY=(vh*scale-ch)/2;
+    var sx=(guideRect.x+offX)/scale, sy=(guideRect.y+offY)/scale;
+    var sw=guideRect.w/scale, sh=guideRect.h/scale;
+    sx=Math.max(0,sx); sy=Math.max(0,sy);
+    sw=Math.min(sw,vw-sx); sh=Math.min(sh,vh-sy);
+
+    var c=$("workCanvas");
+    var outW=1200, outH=Math.round(outW/CASSETTE_RATIO);
+    c.width=outW; c.height=outH;
+    c.getContext("2d").drawImage(video,sx,sy,sw,sh,0,0,outW,outH);
+    setPhoto(currentSide, c.toDataURL("image/jpeg",0.92));
+    closeCamera();
+  }
+
+  /* ---------- phone camera app / photo picker ---------- */
+  window.pickFile = function(){ fileInput.value=""; fileInput.click(); };
+  fileInput.addEventListener("change",function(){
+    var f=fileInput.files && fileInput.files[0];
+    if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){ openCrop(r.result); };
+    r.readAsDataURL(f);
+  });
+
+  /* ---------- crop adjust view ---------- */
+  var cropView=$("cropView"), cropStage=$("cropStage"), cropImg=$("cropImg");
+  var cRect={x:0,y:0,w:0,h:0};              // guide rect in stage px
+  var cT={s:1,tx:0,ty:0,minS:0.05};         // image transform (natural px * s + t)
+
+  function layoutCropGuide(){
+    var cw=cropStage.clientWidth, ch=cropStage.clientHeight;
+    var cap = cw>ch ? 0.72 : 0.55;           // landscape → bigger frame
+    var w=Math.min(cw*0.88, cw>ch ? 760 : 520), h=w/CASSETTE_RATIO;
+    if(h>ch*cap){ h=ch*cap; w=h*CASSETTE_RATIO; }
+    var x=(cw-w)/2, y=(ch-h)/2 - ch*0.04;
+    cRect={x:x,y:y,w:w,h:h};
+    var g=$("cropGuide");
+    g.style.left=x+"px"; g.style.top=y+"px"; g.style.width=w+"px"; g.style.height=h+"px";
+    setRect("cdimT",0,0,cw,y);
+    setRect("cdimB",0,y+h,cw,ch-y-h);
+    setRect("cdimL",0,y,x,h);
+    setRect("cdimR",x+w,y,cw-x-w,h);
+  }
+
+  function applyT(){
+    cropImg.style.transform="translate("+cT.tx+"px,"+cT.ty+"px) scale("+cT.s+")";
+  }
+  function clampT(){
+    var nw=cropImg.naturalWidth, nh=cropImg.naturalHeight;
+    if(cT.s<cT.minS) cT.s=cT.minS;
+    // keep the frame fully covered by the image
+    cT.tx=Math.min(cRect.x, Math.max(cRect.x+cRect.w-nw*cT.s, cT.tx));
+    cT.ty=Math.min(cRect.y, Math.max(cRect.y+cRect.h-nh*cT.s, cT.ty));
+  }
+
+  function fitCropImage(){
+    var nw=cropImg.naturalWidth, nh=cropImg.naturalHeight;
+    if(!nw) return;
+    cropImg.style.width=nw+"px"; cropImg.style.height=nh+"px";
+    var s=Math.max(cRect.w/nw, cRect.h/nh);   // cover the frame
+    cT.minS=s; cT.s=s;
+    cT.tx=cRect.x-(nw*s-cRect.w)/2;
+    cT.ty=cRect.y-(nh*s-cRect.h)/2;
+    applyT();
+  }
+  function openCrop(dataUrl){
+    $("cropHintText").textContent="Drag & pinch to fit the "+(currentSide==="front"?"front":"back")+" in the frame";
+    cropView.classList.add("open");
+    goLandscape(cropView);
+    cropImg.onload=function(){ layoutCropGuide(); fitCropImage(); };
+    cropImg.src=dataUrl;
+  }
+  window.closeCrop=function(){ cropView.classList.remove("open"); cropImg.src=""; leaveLandscape(); };
+
+  // touch: one finger pans, two fingers pinch-zoom
+  var touches={};
+  function tPoint(t){ var r=cropStage.getBoundingClientRect(); return {x:t.clientX-r.left,y:t.clientY-r.top}; }
+  cropStage.addEventListener("touchstart",function(e){
+    for(var i=0;i<e.changedTouches.length;i++){
+      var t=e.changedTouches[i]; touches[t.identifier]=tPoint(t);
+    }
+    e.preventDefault();
+  },{passive:false});
+  cropStage.addEventListener("touchmove",function(e){
+    var ids=Object.keys(touches);
+    if(ids.length===1){
+      var t=e.touches[0], p=tPoint(t), o=touches[t.identifier];
+      if(o){ cT.tx+=p.x-o.x; cT.ty+=p.y-o.y; touches[t.identifier]=p; }
+    } else if(ids.length>=2 && e.touches.length>=2){
+      var a=tPoint(e.touches[0]), b=tPoint(e.touches[1]);
+      var oa=touches[e.touches[0].identifier], ob=touches[e.touches[1].identifier];
+      if(oa && ob){
+        var d0=Math.hypot(ob.x-oa.x,ob.y-oa.y), d1=Math.hypot(b.x-a.x,b.y-a.y);
+        if(d0>0){
+          var f=d1/d0;
+          var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+          cT.tx=mx-(mx-cT.tx)*f; cT.ty=my-(my-cT.ty)*f; cT.s*=f;
+        }
+        touches[e.touches[0].identifier]=a; touches[e.touches[1].identifier]=b;
+      }
+    }
+    clampT(); applyT();
+    e.preventDefault();
+  },{passive:false});
+  function endTouch(e){
+    for(var i=0;i<e.changedTouches.length;i++) delete touches[e.changedTouches[i].identifier];
+  }
+  cropStage.addEventListener("touchend",endTouch);
+  cropStage.addEventListener("touchcancel",endTouch);
+  // mouse fallback (desktop testing)
+  var mDown=null;
+  cropStage.addEventListener("mousedown",function(e){ mDown={x:e.clientX,y:e.clientY}; });
+  window.addEventListener("mousemove",function(e){
+    if(!mDown || !cropView.classList.contains("open")) return;
+    cT.tx+=e.clientX-mDown.x; cT.ty+=e.clientY-mDown.y;
+    mDown={x:e.clientX,y:e.clientY}; clampT(); applyT();
+  });
+  window.addEventListener("mouseup",function(){ mDown=null; });
+  cropStage.addEventListener("wheel",function(e){
+    var f=e.deltaY<0?1.08:0.93;
+    var r=cropStage.getBoundingClientRect();
+    var mx=e.clientX-r.left,my=e.clientY-r.top;
+    cT.tx=mx-(mx-cT.tx)*f; cT.ty=my-(my-cT.ty)*f; cT.s*=f;
+    clampT(); applyT(); e.preventDefault();
+  },{passive:false});
+  window.addEventListener("resize",function(){
+    if(cropView.classList.contains("open")){ layoutCropGuide(); clampT(); applyT(); }
+  });
+
+  $("cropOk").addEventListener("click",function(){
+    if(!cropImg.naturalWidth) return;
+    // frame rect (stage px) -> image natural px
+    var sx=(cRect.x-cT.tx)/cT.s, sy=(cRect.y-cT.ty)/cT.s;
+    var sw=cRect.w/cT.s, sh=cRect.h/cT.s;
+    var c=$("workCanvas");
+    var outW=1200, outH=Math.round(outW/CASSETTE_RATIO);
+    c.width=outW; c.height=outH;
+    c.getContext("2d").drawImage(cropImg,sx,sy,sw,sh,0,0,outW,outH);
+    setPhoto(currentSide, c.toDataURL("image/jpeg",0.92));
+    closeCrop();
+  });
+
+  /* ---------- state / thumbs ---------- */
+  function setPhoto(side,dataUrl){
+    state[side]=dataUrl;
+    var thumb=$(side==="front"?"thumbFront":"thumbBack");
+    thumb.innerHTML='<img alt="'+side+' of cassette" src="'+dataUrl+'">';
+    $(side==="front"?"slotFront":"slotBack").classList.add("done");
+    toast((side==="front"?"Front":"Back")+" saved ✓");
+  }
+  function resetCurrent(){
+    state={front:null,back:null};
+    ["Front","Back"].forEach(function(s){
+      $("thumb"+s).innerHTML='<div class="ph"><span class="cam">📷</span>Tap to photograph<br>the '+s.toLowerCase()+'</div>';
+      $("slot"+s).classList.remove("done");
+    });
+  }
+
+  /* ---------- details ---------- */
+  function details(){
+    return {
+      brand: $("brand").value.trim(),
+      model: $("model").value.trim(),
+      len:   $("len").value,
+      type:  $("type").value,
+      cond:  $("cond").value
+    };
+  }
+  function detailsTitle(d){
+    return [d.brand,d.model,d.len].filter(Boolean).join(" ") || "Unknown tape";
+  }
+  function detailsSub(d){
+    return [d.type,d.cond].filter(Boolean).join(" · ");
+  }
+
+  /* ---------- search links ---------- */
+  function updateLinks(){
+    var d=details();
+    var q=[d.brand,d.model,d.len].filter(Boolean).join(" ");
+    var enc=encodeURIComponent;
+    var g=function(site){ return "https://www.google.com/search?q="+enc("site:"+site+" "+q); };
+
+    var ebayQ=q+" cassette"+(d.cond==="Sealed"?" sealed":"");
+    $("qEbay").href="https://www.ebay.com/sch/i.html?_nkw="+enc(ebayQ)+"&LH_Sold=1&LH_Complete=1";
+    $("qTapedeck").href=g("tapedeck.org");
+    $("qTardis").href=g("tapetardis.wordpress.com");
+    $("q45").href=g("45spaces.com");
+    $("qVintage").href=g("vintagecassettes.com");
+    $("qTapeheads").href=g("tapeheads.net");
+    $("qAudiochrome").href=g("audiochrome.blogspot.com");
+    $("qAgfaBasf").href=g("agfabasf.com");
+    $("qComeback").href="https://www.youtube.com/results?search_query="+enc("Cassette Comeback "+q);
+    $("qGoogle").href="https://www.google.com/search?q="+enc(q+" blank cassette tape");
+  }
+  ["brand","model","len","type","cond"].forEach(function(id){
+    $(id).addEventListener("input",updateLinks);
+    $(id).addEventListener("change",updateLinks);
+  });
+  updateLinks();
+  ["qEbay","qTapedeck","qTardis","q45","qVintage","qTapeheads","qAudiochrome","qAgfaBasf","qComeback","qGoogle"].forEach(function(id){
+    $(id).addEventListener("click",function(e){
+      var d=details();
+      if(!d.brand && !d.model){ e.preventDefault(); toast("Type the brand or model first"); }
+    });
+  });
+
+  /* ---------- collection ---------- */
+  window.addToCollection = function(){
+    if(!state.front && !state.back){ toast("Take at least one photo first"); return; }
+    var d=details();
+    collection.push({front:state.front, back:state.back, d:d});
+    renderCollection();
+    resetCurrent();
+    toast("Added: "+detailsTitle(d)+" ✓");
+  };
+
+  window.removeItem = function(i){
+    collection.splice(i,1);
+    renderCollection();
+  };
+
+  function renderCollection(){
+    var list=$("collList");
+    $("collEmpty").style.display = collection.length ? "none" : "block";
+    list.innerHTML="";
+    collection.forEach(function(item,i){
+      var el=document.createElement("div");
+      el.className="collItem";
+      var pics='<div class="pics">'+
+        (item.front?'<img src="'+item.front+'" alt="front">':'<div class="nopic">no front</div>')+
+        (item.back ?'<img src="'+item.back +'" alt="back">' :'<div class="nopic">no back</div>')+
+        '</div>';
+      var info='<div class="info"><b></b><span></span></div>';
+      var acts='<div class="acts">'+
+        '<button class="dl" onclick="downloadCard('+i+')">card ⬇</button>'+
+        '<button onclick="removeItem('+i+')">remove</button></div>';
+      el.innerHTML=pics+info+acts;
+      el.querySelector(".info b").textContent=detailsTitle(item.d);
+      el.querySelector(".info span").textContent=detailsSub(item.d)||"—";
+      list.appendChild(el);
+    });
+  }
+
+  /* ---------- CSV export ---------- */
+  window.downloadCSV = function(){
+    if(!collection.length){ toast("Collection is empty"); return; }
+    var rows=[["Brand","Model","Length","Type","Condition","Front photo","Back photo"]];
+    collection.forEach(function(it){
+      rows.push([it.d.brand,it.d.model,it.d.len,it.d.type,it.d.cond,
+                 it.front?"yes":"no", it.back?"yes":"no"]);
+    });
+    var csv=rows.map(function(r){
+      return r.map(function(v){ return '"'+String(v==null?"":v).replace(/"/g,'""')+'"'; }).join(",");
+    }).join("\r\n");
+    var link=document.createElement("a");
+    link.download="tape-collection.csv";
+    link.href="data:text/csv;charset=utf-8,"+encodeURIComponent("﻿"+csv);
+    document.body.appendChild(link); link.click(); link.remove();
+    toast("CSV downloaded ✓");
+  };
+
+  /* ---------- tape card export ---------- */
+  window.downloadCard = function(i){
+    var front,back,d;
+    if(i===null || i===undefined){
+      front=state.front; back=state.back; d=details();
+      if(!front && !back){ toast("Take at least one photo first"); return; }
+    } else {
+      var it=collection[i]; if(!it) return;
+      front=it.front; back=it.back; d=it.d;
+    }
+    var W=1400, pad=50, gap=40;
+    var imgW=(W-pad*2-gap)/2, imgH=imgW/CASSETTE_RATIO;
+    var headH=140, footH=70;
+    var H=Math.round(headH+imgH+56+footH+pad);
+
+    var c=$("workCanvas");
+    c.width=W; c.height=H;
+    var x=c.getContext("2d");
+    x.fillStyle="#141210"; x.fillRect(0,0,W,H);
+    x.fillStyle="#e8792b"; x.fillRect(0,0,W,10);
+
+    x.fillStyle="#f2ece2"; x.textBaseline="top";
+    x.font="700 52px -apple-system,Segoe UI,Roboto,sans-serif";
+    x.fillText(detailsTitle(d), pad, 46);
+    x.fillStyle="#f5b942";
+    x.font="500 34px -apple-system,Segoe UI,Roboto,sans-serif";
+    x.fillText(detailsSub(d)||"", pad, 106);
+
+    function place(dataUrl,px,label,then){
+      var py=headH+40;
+      x.fillStyle="#2a251f";
+      x.fillRect(px,py,imgW,imgH);
+      x.fillStyle="#9a8f80";
+      x.font="600 24px -apple-system,Segoe UI,Roboto,sans-serif";
+      x.fillText(label,px,py+imgH+14);
+      if(!dataUrl){
+        x.textAlign="center";
+        x.fillText("no photo",px+imgW/2,py+imgH/2-12);
+        x.textAlign="left"; then(); return;
+      }
+      var im=new Image();
+      im.onload=function(){ x.drawImage(im,px,py,imgW,imgH); then(); };
+      im.src=dataUrl;
+    }
+    place(front,pad,"FRONT",function(){
+      place(back,pad+imgW+gap,"BACK",function(){
+        x.fillStyle="#9a8f80";
+        x.font="400 22px -apple-system,Segoe UI,Roboto,sans-serif";
+        x.fillText("Scanned "+new Date().toLocaleDateString(), pad, H-footH+6);
+        var link=document.createElement("a");
+        var name=detailsTitle(d);
+        link.download=name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-tape-card.jpg";
+        link.href=c.toDataURL("image/jpeg",0.92);
+        document.body.appendChild(link); link.click(); link.remove();
+        toast("Tape card downloaded ✓");
+      });
+    });
+  };
+})();
+</script>
+</body>
+</html>
