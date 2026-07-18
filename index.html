@@ -259,14 +259,14 @@
     <h2>Tape details</h2>
     <div class="row2">
       <div class="field">
-        <label for="brand">Brand</label>
-        <input id="brand" type="text" placeholder="TDK" autocomplete="off" list="brandList">
-        <datalist id="brandList"><option>Acme</option><option>Agfa</option><option>Aiwa</option><option>Akai</option><option>AKG</option><option>AT&amp;T</option><option>ATC</option><option>Audio</option><option>AudioMagnetics</option><option>Audiomania</option><option>Audiotech</option><option>Bang</option><option>BASF</option><option>BBC</option><option>Bell</option><option>Blaupunkt</option><option>Boots</option><option>BRG</option><option>Casio</option><option>Certron</option><option>Cobra</option><option>Coltina</option><option>Columbia</option><option>Commodore</option><option>Commtel</option><option>Conrac</option><option>CVS</option><option>Daimon</option><option>DAK</option><option>Decca</option><option>Denon</option><option>Dessauer</option><option>Dictaphone</option><option>Dixons</option><option>Duofone</option><option>ECP</option><option>Eico</option><option>Elac</option><option>Elite</option><option>Emgeton</option><option>EMI</option><option>EMITape</option><option>Exel</option><option>Expert</option><option>Fisher</option><option>Fostex</option><option>Foton</option><option>Fuji</option><option>Galin</option><option>GE</option><option>General</option><option>Gold</option><option>Gradiente</option><option>Grundig</option><option>Hanssler</option><option>Hewlett</option><option>Hitachi</option><option>Horten</option><option>ICM</option><option>ICN</option><option>Ilford</option><option>Intersonic</option><option>James</option><option>Jugodisk</option><option>JVC</option><option>Kamichi</option><option>Kenwood</option><option>Kodak</option><option>Konica</option><option>Korg</option><option>Kovinoplastika</option><option>Leda</option><option>Loewe</option><option>Loran</option><option>Luxman</option><option>Magna</option><option>Magnex</option><option>Marantz</option><option>Mark</option><option>Maxell</option><option>Memorex</option><option>MK</option><option>Motorola</option><option>MTP</option><option>NAI</option><option>Nakamichi</option><option>National</option><option>Norelco</option><option>Opus</option><option>ORWO</option><option>Osawa</option><option>Oxus</option><option>Palladium</option><option>Panasonic</option><option>Pathe</option><option>PDM</option><option>PDMagnetics</option><option>Permaton</option><option>Philips</option><option>Phono-silver</option><option>Pickwick</option><option>Pioneer</option><option>Polimer</option><option>Porst</option><option>Prism</option><option>Pyral</option><option>Radio</option><option>Radiola</option><option>Raks</option><option>Raks-N-Roll</option><option>Range</option><option>RCA</option><option>Realistic</option><option>Reel</option><option>Revox</option><option>Revue</option><option>Roland</option><option>RONEeS</option><option>Ross</option><option>Saehan</option><option>Sakura</option><option>Samsung</option><option>Sana</option><option>Sankey</option><option>Sansui</option><option>Sanyo</option><option>Schneider</option><option>Scotch</option><option>Scott</option><option>Sharp</option><option>SKC</option><option>Slavich</option><option>SNC</option><option>Sona</option><option>Sony</option><option>Stilon</option><option>Superton</option><option>Supra</option><option>Svema</option><option>Tallinna</option><option>Tandberg</option><option>Tandy</option><option>TDK</option><option>Teac</option><option>Technics</option><option>Telefunken</option><option>Thats</option><option>Thomsun</option><option>Thorens</option><option>TnB</option><option>Toshiba</option><option>Track</option><option>Unitra</option><option>Universum</option><option>Video</option><option>Waltham</option><option>Watson</option><option>Wellton</option><option>Yamaha</option><option>Zeepa</option><option>Zenith</option><option>ZWN</option><option>ZZZ</option></datalist>
+        <label for="brandSel">Brand</label>
+        <select id="brandSel"></select>
+        <input id="brand" type="text" placeholder="Brand name" autocomplete="off" style="display:none;margin-top:8px">
       </div>
       <div class="field">
-        <label for="model">Model</label>
-        <input id="model" type="text" placeholder="SA, XLII-S, Chrome Extra…" autocomplete="off" list="modelList">
-        <datalist id="modelList"></datalist>
+        <label for="modelSel">Model</label>
+        <select id="modelSel" style="display:none"></select>
+        <input id="model" type="text" placeholder="SA, XLII-S, Chrome Extra…" autocomplete="off">
       </div>
     </div>
     <div class="row2">
@@ -821,28 +821,26 @@
   "use strict";
   var TAPE_DB = {"Acme":[["C",1,[60]],["Chrome",2,[90]],["Chromium Dioxide",2,[60]],["MS 400",1,[90]],["MS 800",1,[90]],["Super Hi Energy",1,[60]]],"Agfa":[],"Aiwa":[["C",1,[60]],["DX",1,[90]],["FRC",1,[60,90]],["LN",1,[60]],["LX",1,[60]],["MX",4,[60]]],"Akai":[["C-LN",1,[60]],["C-MT",4,[60]],["Demo Tape",1,[30]],["EGF",1,[46]],["GX",1,[90]],["HX",1,[90]],["SX",1,[90]]],"AKG":[["Chrom",2,[50]]],"AT&T":[["Incoming Message Tape",1,[60]]],"ATC":[["XT-I",1,[60]]],"Audio":[["Club AC Super",1,[60]],["Club Chromdioxid",2,[90]]],"AudioMagnetics":[["C",1,[60,90]],["Extra",1,[66,99]],["Plus",1,[60]],["Super",1,[60]],["Tracks",1,[60]],["Tracks D Series",1,[90]],["Tracks Plus",1,[60]],["XHE II",2,[90]]],"Audiomania":[["Super LH",1,[60]]],"Audiotech":[["Low Noise",1,[60]]],"Bang":[["And Olufsen",2,[90]]],"BASF":[],"BBC":[["CDS",2,[90]],["FX",1,[60,90]]],"Bell":[["and Howell Filmosound 8",1,[8]]],"Blaupunkt":[["C",1,[60]]],"Boots":[["1 (IEC1)",0,[90]],["Audio CRX-2",2,[90]],["Audio MF2",1,[90]],["Audio Micro-ferric",1,[90]],["Audio SX15",1,[90]],["Chrome",2,[90]],["CPII",2,[90]],["Ferric",1,[90]]],"BRG":[["C",1,[90]],["M",1,[60]]],"Casio":[["AG",1,[60,90]]],"Certron":[["D",1,[60]],["Gamma",1,[120]],["HD",1,[60,90]],["LN",1,[60]],["Pro",1,[90,120]]],"Cobra":[["TA-8530",1,[30]]],"Coltina":[["C",1,[60]]],"Columbia":[["Magnetics",1,[90]]],"Commodore":[["VIC",1,[20]]],"Commtel":[["Outgoing Message Cassette",1,[1]]],"Conrac":[["XR Pro",1,[60]]],"CVS":[["Metal EGF",4,[60]]],"Daimon":[["Chromdioxid",2,[90]],["Ferro Extra",1,[60]],["GXP II",2,[60]],["Profi Chrome II",2,[60,90]],["Super HiFi Low Noise",1,[60,90]],["Superchrom Plus",2,[90]]],"DAK":[["HEC",1,[90]],["MLX",1,[90]],["MLX2",2,[90]]],"Decca":[["C",1,[60]]],"Denon":[["CD Jack IV",4,[70]],["CR-II",2,[90]],["DX",1,[90]],["DX1",1,[40,50,60,90]],["DX3",1,[42,46,50,90]],["DX4",1,[60]],["DX5",3,[60]],["DX7",2,[60,90]],["DX8",2,[90]],["DXM",4,[60,90]],["GR-IV",4,[46]],["HD",2,[46,64]],["HD-M",4,[90,100]],["HD-MS",4,[100]],["HD-X",2,[90]],["HD-XS",2,[50]],["HD6",2,[60,90]],["HD6S",2,[90]],["HD7",2,[90,100]],["HD7S",2,[90]],["HD8",2,[60,90,100]],["HD8S",2,[90]],["HFGC",1,[60]],["HG",2,[64]],["KF60GB Spanking New",1,[60]],["KF60PB Spanking New",1,[60]],["LX",1,[60,90]],["MD",4,[74]],["MG-X",4,[100]],["RD-X",1,[54]],["RD-Z",1,[46,74]],["RS",2,[20]],["S-Port High",2,[100]],["S-Port Metal",4,[100]],["Sound Sketch",1,[60]],["Zippy I",1,[74]],["Zippy II",2,[74,90]]],"Dessauer":[["Car Tape",2,[60]],["Ferro Tape",2,[90]]],"Dictaphone":[["1 (IEC1)",0,[30]]],"Dixons":[["C",1,[60,90]],["DL",1,[90]],["DX",1,[90]]],"Duofone":[["SFC",1,[10,60]]],"ECP":[["EF",1,[60,90]],["Green Mount",1,[90]],["UF",1,[90]],["Ultra Ferro",1,[46]]],"Eico":[["ET",2,[54]],["IPD EX",1,[54]]],"Elac":[["Stereo Cassette",2,[30]]],"Elite":[["Cassette",1,[60,90,120]],["Chromdioxid",2,[60,90,120]],["Chromdioxid II",2,[60]],["Ferro I",1,[90]],["Ferro II",1,[90]],["Ferro-Chrom",3,[60]],["Super Chrom II",2,[90]]],"Emgeton":[["C",1,[60]],["LH",1,[45,60,90]],["LN Stereo",1,[60,90]]],"EMI":[["EXT",1,[90]],["Super C",1,[60,90]]],"EMITape":[["Hi-Dynamic",1,[60,90]],["X1000",1,[60,90]]],"Exel":[["Ferro",1,[90]]],"Expert":[["Hi-Fi Series",1,[60]],["Hi-Fi Series Super",1,[60]],["Low Noise",1,[60]]],"Fisher":[["CR",2,[90]],["LH",1,[90]],["Reels",2,[50]]],"Fostex":[["CT-5",2,[60]]],"Foton":[["1 (IEC1)",0,[60,90]],["MK-60",1,[60]],["MK-60-6",1,[60]],["MK-60c",1,[60]]],"Fuji":[],"Galin":[["D",1,[90]],["GT",1,[60]]],"GE":[["C",1,[30]],["HO",1,[90]]],"General":[["TME",4,[60]]],"Gold":[["Star Beach Festival",1,[90]],["Star CD Gallery 1",1,[90]],["Star CD Gallery 2",2,[90]],["Star CRX",2,[90]],["Star HD",1,[60,90]],["Star HP",1,[60,90]],["Star HR",1,[60,90]],["Star HZ",1,[90]],["Star Live Concert",1,[90]],["Star Pop Concert",1,[90]],["Star SHP",1,[60,90]],["Star Symphonic Rock",1,[60]]],"Gradiente":[["GMT",4,[60]],["GN",1,[60]]],"Grundig":[["C",1,[60,90,120]],["Ferro Chrom",3,[60]],["Ferrochrom Profi-Cassette",3,[60,90]],["Fine Arts",1,[10]],["GF",1,[90]],["Hi-Fi Cassette",2,[60]],["Hi-Fi Cassette Chromdioxid",2,[60]],["Studio-Cassette",1,[60]],["Studio-Cassette High-Energy",1,[60]],["Studio-Cassette LHX",1,[60]],["Super Hi-Fi Cassette",2,[90]]],"Hanssler":[["Chrome Super",2,[90]],["Maximum",2,[60]]],"Hewlett":[["Packard 9162-0050 Digital Cassette",2,[90]]],"Hitachi":[["C",1,[60,90]],["C O",1,[60]],["CD-S",1,[54]],["CO-OD",1,[60,120]],["DJ",1,[46]],["DL",1,[60,90]],["EX",2,[60,90]],["LN",1,[30,60]],["ME",4,[60,90]],["Paclip",1,[46]],["Twinkle",1,[46]],["UD",1,[60,90,120]],["UD-ER",1,[90]],["UD-EX",2,[90]],["UD-F",1,[60]],["UD-N",1,[46]],["UD-S",1,[50]],["UD-V",2,[60]],["UDR",1,[90]]],"Horten":[["Supersound",1,[90]]],"ICM":[["Hi-Fi Chromdioxid",2,[60]],["Hi-Fi Ferro",1,[60]],["Hi-Fi Superferro",1,[60]],["Superchrom SCX II",2,[60,90]]],"ICN":[["C",1,[10,45]]],"Ilford":[["C",2,[60]],["DP",2,[60]],["PC",2,[60]]],"Intersonic":[["AD",1,[60]],["C",1,[60]],["GL",1,[46]]],"James":[["Yorke C",2,[90]],["Yorke Ferric",1,[60]]],"Jugodisk":[["LH Extra",1,[60]]],"JVC":[["AF1",1,[90]],["AF2",2,[90]],["AF2-S",2,[90]],["ERAMS",1,[60]],["F1",1,[60,90]],["F1-S",1,[90]],["G1",1,[60,90]],["ME P II",4,[60]],["Metal",4,[30]],["Nivico",1,[60]],["UF I",1,[90]],["UF II",2,[60]],["UF IIS",2,[60]],["XFIV",4,[90]]],"Kamichi":[["C",1,[60]],["LH",1,[90]]],"Kenwood":[["C",2,[50,60]],["CD",2,[90]],["N",1,[60]],["ND",1,[60]]],"Kodak":[["C",1,[60]]],"Konica":[["KX",1,[60]],["KX-HR",2,[90]],["KX-I",1,[90]],["KX-II",1,[90]],["ML",1,[60]],["MM",4,[90]],["SGI",1,[60]],["SGII",2,[60]],["Super SR-I",1,[90]],["XR-I",1,[75,90,100,120]],["XR-II",1,[90]]],"Korg":[["C",1,[50]]],"Kovinoplastika":[["LOZ",1,[90]]],"Leda":[["Chromium Dioxide",2,[90]],["Low Noise",1,[60]]],"Loewe":[["Opta",1,[60]]],"Loran":[["Chrome",2,[60]]],"Luxman":[["XM-IV",4,[60]],["XN-II",2,[90]]],"Magna":[["Chromdioxid",2,[90]],["Chromdioxid II CR",2,[60,90]],["Chromdioxid II S",2,[60]],["Dynamic Plus",1,[60]],["Ferro Dynamic S",1,[60]],["Ferro Dynamik S",1,[60]],["Ferrochrom III",3,[60]],["Home Computer",1,[20]],["Metal",4,[60]],["Professional XD",1,[90]],["Reels",1,[50,60]],["SCR",2,[60]],["Super Chrom SC",2,[60]],["Super Ferro XD",1,[60]]],"Magnex":[["Chromdioxide",2,[60]],["Chromdioxide Special",1,[90]],["Studio 2",2,[90]],["Studio 4",4,[60]],["Studio LH",1,[60]],["Studio LN",1,[60]],["Studio PC",1,[12]]],"Marantz":[["MC2",2,[90]],["MF1",1,[60]],["MM4",4,[60]]],"Mark":[["II Super Chrom",2,[90]],["II Super Ferro",1,[90]]],"Maxell":[],"Memorex":[["1 (IEC1)",0,[60]],["Audio Chrome",2,[90]],["CD2",2,[110]],["CDx",2,[90]],["Chrome Super",2,[90]],["Chromium Dioxide Cassete",2,[60]],["Chromium Dioxide II",2,[90]],["CIRE II",2,[110]],["CRX II",2,[90]],["CRX II S",2,[90]],["DB",1,[60,90]],["DB-X",1,[90]],["DBS",1,[60,90,120]],["DBS Plus",1,[90]],["DBS1",1,[60,90]],["DBx",1,[90]],["HB II",2,[60]],["HBS II",2,[76]],["Hi Intensity Cassete",1,[60]],["High Bias",2,[90]],["MRX2 Oxide",1,[60]],["MRX3 Oxide",1,[60,90]],["MRXI S",1,[60,90]],["NB",1,[90]],["Out Of This World",1,[60]],["Pacific Stereo",1,[90]],["SHQ",1,[90]],["Sound Invasion",1,[90]],["Studio",2,[90]]],"MK":[["45-5",1,[45]],["50-1",1,[50]],["60",1,[60]],["60-1",1,[60]],["60-15",1,[60]],["60-16",1,[60]],["60-1m",1,[60]],["60-2",1,[60]],["60-3",1,[60]],["60-4",2,[60]],["60-5",1,[60]],["60-5 Starmaster",1,[60]],["60-6",1,[60]],["60-6a",1,[60]],["60-7",2,[60]],["60-8",1,[60]],["60-9",1,[60]],["90-16 Reporter",2,[90]],["90-5",1,[90]],["90-6",1,[90]]],"Motorola":[["C",1,[30]]],"MTP":[["EF",1,[90]]],"NAI":[["Digi-Chrome",2,[90]]],"Nakamichi":[["EXII",1,[60,90]],["SX-C",2,[46,60,90]],["SXII-C",2,[90]],["ZX-C",4,[15,90]]],"National":[["Panasonic C",1,[7,30]],["Panasonic RT",1,[60,90]],["Panasonic RT-S",1,[60]]],"Norelco":[["200",1,[60]],["C",1,[60]],["Challenger",1,[60]]],"Opus":[["C",1,[90]],["Chromium Dioxide",2,[60]],["FE",1,[90]],["UD",1,[90]]],"ORWO":[["Audio Cr Extra II Hi-Fi",2,[60,90]],["Chromdioxid HiFi",2,[60]],["Chromdioxid HiFi Extra",2,[60]],["DARO 1250",1,[60]],["DK490",1,[60]],["FE I LH",1,[60]],["K",1,[10,60,90]]],"Osawa":[["CR",2,[60]],["FC",3,[90]],["LH",1,[46]]],"Oxus":[["RS",1,[90]]],"Palladium":[["CrO2",1,[45,60]],["Fe2O3",1,[90]]],"Panasonic":[["Aufzeichnungskassette",1,[60]],["C",1,[60]],["EN",1,[60]],["Endlos Ansagekassette",1,[1]],["EP",1,[90]],["Greeting (Outgoing) Message Cassette",1,[15]],["GX",1,[46,60]],["HX",2,[54]],["Incoming Message Cassette",1,[60]],["SN",1,[60]]],"Pathe":[["Marconi PFe",1,[60]]],"PDM":[["CD",2,[90]],["FE",1,[46,60,90]],["FE X",1,[60]],["ME-X",4,[90]]],"PDMagnetics":[["1100 Metal",4,[60]],["500 Crolyn",2,[60]],["Ferro",1,[90]]],"Permaton":[["Chrome Plus",2,[90]],["Chrome Super",2,[90]],["Chrome Super II",2,[60,80]],["Ferro 1 Plus",1,[90]],["Ferro Chrom",3,[90]],["Ferro Plus",1,[90]],["Professional",1,[90]],["Sound-77",1,[60,90]],["Super Ferro",1,[60]]],"Philips":[["C",1,[60,90,120]],["CC",1,[3]],["CD Extra",2,[60,90]],["CD Master",4,[60]],["CD One",1,[60,90]],["CD Plus",1,[90]],["Chromium",2,[60]],["Chromiumdioxide",2,[60]],["Computercassette CP",1,[15]],["CSQ",2,[90]],["Educational Cassette LCH006500",1,[60]],["FE-I",1,[60,90]],["Ferro",1,[60,90]],["Ferro Chromium",3,[60]],["FS",1,[60,90]],["FSX",1,[60,90]],["FX Ferro",1,[90]],["Hi-Fi Quality",2,[60,90]],["Low Noise",1,[60,90,120]],["MC-II",2,[90]],["MCX",2,[90]],["MCX Master",2,[75,90]],["Metal C",4,[60,90]],["Sample",1,[60]],["Spesialist",1,[60]],["SQ-1",1,[60,90]],["Standart Quality",1,[60,90]],["Studio Quality",1,[60,90]],["Super Chrome",2,[90]],["Super Ferro 1",1,[90]],["Super Quality",1,[60,90,120]],["UC-II",2,[60,90]],["UCX",2,[60,90]],["UCX Ultra",2,[90]],["Ultra Chrome",2,[90]],["Ultra Ferro",1,[60]]],"Phono-silver":[["Super Ferric",1,[90]]],"Pickwick":[["Pro",1,[60]]],"Pioneer":[["M1",4,[60]],["M1a",4,[60]],["N1",1,[90]],["N1a",1,[60]],["N1i",1,[60]],["N1z",1,[60]],["N2a",1,[90]],["N3a",1,[46]]],"Polimer":[["Chrom",2,[60]],["CRO2 HiFi",2,[60]],["Ferrochrom",3,[90]],["LH HiFi",1,[66,90,96]],["LH Super",1,[90]],["Super Chrom",2,[60]]],"Porst":[["C",1,[90]],["Chromdioxid II",2,[90]],["LH",1,[60,90]]],"Prism":[["C",1,[90]],["CX",1,[90]]],"Pyral":[["C",1,[40,90]],["Echo Du Monde",1,[90]],["Superferrite",1,[90]]],"Radio":[["Shack Concertape",1,[30,60,90,120]],["Shack LN",1,[60]],["Shack MP-X",4,[90]],["Shack XR",1,[90,120]]],"Radiola":[["C",1,[60,120]],["Metal",4,[60]],["Standard Quality",1,[90]],["Super Quality",1,[60]]],"Raks":[["AX",1,[60,90]],["Cabrio",2,[60]],["CD-SX",1,[90]],["CD-X",1,[60]],["DX",1,[60]],["ED-SX",1,[60]],["ED-X",1,[90]],["HD-X",1,[90]],["HD-X I",1,[90]],["HD-X II",2,[60]],["HDE",1,[90]],["HDF",1,[60]],["High Dynamic",1,[60]],["RX",1,[60]],["SD-SX",2,[90]],["SD-X",2,[90]],["SP Metal",4,[90]],["SP1",1,[100]],["SP2s",2,[120]],["SX",1,[46,90]]],"Raks-N-Roll":[["1 (IEC1)",0,[60]]],"Range":[["Chrom",2,[60]],["Chrome Maxima II",2,[60]],["Extra I",1,[90]],["Fe",1,[90]],["Ferro Extra I",1,[60,90]],["RC",1,[90]]],"RCA":[["RC",1,[90]]],"Realistic":[["C",1,[90]],["Low Noise",1,[90]]],"Reel":[["Cleer Color I",1,[60]],["Cleer CRM II",2,[60]]],"Revox":[["AV",1,[60]],["Chromium",2,[60]]],"Revue":[["Chromdioxid",2,[60]]],"Roland":[["1 (IEC1)",0,[50]]],"RONEeS":[["CD F",2,[90]],["CD L",2,[90]],["NR",1,[90]],["Super Chrome plus for CD-L",2,[90]],["Super Ferro plus F",1,[60]],["Super Ferro plus for CD-S",1,[90]],["Super Ferro SF",1,[60]],["UF",1,[60]],["UR",1,[60,90]]],"Ross":[["1 (IEC1)",0,[30,120]]],"Saehan":[["Chorus",1,[90]],["Ma",4,[90]],["MA Romantic",1,[90]],["Md",1,[60]],["Me",1,[60]],["Media MM",1,[90]],["MM Pure",1,[90]],["MS",1,[90]],["SA",1,[90]],["SB",1,[90]],["ST",1,[90]],["Super Z",1,[90]],["SX",1,[90]]],"Sakura":[["F1",1,[90]]],"Samsung":[["MD",1,[90]],["MM",1,[60]],["SQC",1,[90]],["SQX",2,[90]],["Super Z",1,[90]],["XM-1",1,[90]],["XM-5",2,[60]],["XM-H",1,[90]]],"Sana":[["SAX",2,[90]]],"Sankey":[["HR",1,[60]]],"Sansui":[["CR",2,[60]],["HP",2,[90]]],"Sanyo":[["After School",1,[46]],["C",1,[8,10,12,30,50,60,90]],["C-LN",1,[60,90]],["C-R The Reverse",1,[46]],["C-X",1,[60]],["Endless Tape",1,[1]],["Executive Cassette",1,[60]],["Out Going Message",1,[15]],["RX",1,[90]],["SERD",1,[60,90]],["SERD Chromdioxid",2,[60]]],"Schneider":[["Chromdioxid",2,[60]],["Ferro Low Noise",1,[60]],["Ferro Super",1,[60]]],"Scotch":[["272",1,[60]],["830",1,[60]],["996 X-I",1,[54]],["AVX",1,[60]],["BX",1,[60,90]],["C",1,[60]],["Chrome",2,[60]],["Classic",1,[90]],["Classic Ferrichrome",3,[60]],["CX",1,[60,90]],["Dynarange",1,[60,90]],["Ferric",1,[60,90]],["Ferrichrome",3,[60]],["High Energy",3,[60,90]],["Highlander",1,[60,90]],["LO",1,[60]],["Master I",1,[90]],["Master II",2,[90]],["Master III",3,[90]],["Metafine",4,[46]],["S-C",1,[60]],["Screamr",1,[90]],["Superferric",1,[60]],["Superlife",1,[60]],["XSI",1,[60,90]],["XSII",2,[60,90]],["XSII-S",2,[90]],["XSII-SP",2,[60]],["XSII-SX",2,[90]],["XSM IV",4,[60,90]]],"Scott":[["CQ",2,[90]]],"Sharp":[["C",1,[15,30,52,60]]],"SKC":[["AX",1,[46,90]],["CD",2,[60,90,100]],["GX",1,[46,60,90,120]],["HX",2,[60]],["LX",1,[46,60,90,120]],["QX",2,[46,90]],["SE",1,[90]],["ZX",4,[60,90]]],"Slavich":[["C",1,[60,90]],["Gima NS",1,[90]]],"SNC":[["HQ-1",1,[90]]],"Sona":[["1 (IEC1)",0,[60]],["AS",1,[60]],["Classic",1,[62]],["Eagle Stereo",1,[60]]],"Sony":[["A-La",1,[46]],["AHF",1,[60,90]],["BHF",1,[60]],["C",1,[30,45,60,90,120]],["CBS",1,[90]],["CD Alpha",2,[90]],["CD-IT",2,[74,100]],["CD-IT Pro",2,[74,100]],["CDIT 1",1,[60,90]],["CDIT 2",2,[60,74,90]],["CDIT 4",4,[54,74,94,100]],["CDIX 1",1,[60,150]],["CDIX 2",2,[40,50,54,74]],["CDIX 4",4,[46,54,60]],["CHF",1,[90]],["Chiara UX",2,[50,70]],["Chrome",2,[90]],["Classic",1,[74]],["CR",2,[60]],["CRO",2,[92]],["DC",1,[60,90]],["Dictation Cassette",1,[10]],["Do",2,[46]],["Duad",3,[30,60,90]],["EF",1,[90]],["ES-II",2,[54,74,90]],["ES-IV",4,[60,100]],["Esprit-I",1,[100]],["Esprit-II",2,[90]],["Esprit-IV",4,[90]],["FeCr",3,[60,90]],["Firma",1,[70]],["FN",1,[60,90]],["FX",1,[90]],["FX I",1,[90]],["FX II",2,[90]],["G-UP",2,[60]],["GF-X",1,[90]],["GIG-2",2,[46,80,120]],["HD-F",1,[90]],["HF",1,[10,46,60,90,92,120]],["HF-ES",1,[46,54,60,90]],["HF-Pro",1,[46,74]],["HF-S",1,[90]],["HF-X",1,[90]],["HFII",2,[90]],["HFX",1,[60]],["Hi-Fi",1,[90]],["Hip Pop",1,[90]],["JHF",2,[90]],["LNX",1,[90]],["Magazine Tape",1,[60,90]],["Metal ES",4,[60,90]],["Metal Master",4,[90]],["Metal Select",4,[90]],["Metal SR",4,[100]],["Metal Turbo",4,[54]],["Metal X",4,[90]],["Metal XR",4,[46,80,90]],["Metal-S",4,[90]],["Metallic",4,[60,90]],["Nota",1,[54,74]],["SOM",1,[15]],["Stamina XII",2,[54]],["Super CDIT 2",2,[74]],["Super EF",1,[60,90]],["Super Metal Master",4,[90]],["UCX",2,[60,90]],["UCX-S",2,[60,90]],["UX",2,[90]],["UX-ES",2,[90]],["UX-Master",2,[46]],["UX-PRO",2,[46,50,74,90]],["UX-S",2,[60,90,100]],["UX-TURBO",2,[100]],["Walkman",1,[90,100]],["Whats Up",1,[46]],["X1",1,[90]],["XS II",2,[90]],["Xtune 2",2,[64]],["ZX",1,[90]]],"Stilon":[["C",1,[60,90,120]],["Ferrum Forte",1,[60,90]],["Ferrum Maxi",1,[60]],["Foton",1,[60]],["Kaseta Chromowa",2,[60,90]],["Metal Quadro",4,[90]]],"Superton":[["C",1,[60,90]]],"Supra":[["AX C",1,[90]]],"Svema":[["HD",1,[60]]],"Tallinna":[["Helikassetitehas",1,[60]]],"Tandberg":[["C XD",1,[60]]],"Tandy":[["Computer Certified",1,[20]]],"TDK":[["A",1,[60,90]],["AD",1,[46,50,60,90,120]],["AD-C",1,[45,60,90]],["AD-S",1,[46]],["AD-X",1,[46,90]],["AD1",1,[64]],["AD2",1,[150]],["AE",1,[30,46,60,120,150]],["AM",1,[120]],["AR",1,[46,50,60,90]],["AR Limited Edition",1,[90]],["AR-X",1,[50,60,90]],["AV-D",1,[30]],["B",1,[60]],["Beam2",2,[64]],["C",1,[30,60,90]],["C F",1,[90]],["C LN",1,[90,180]],["CD Bass",1,[74]],["CDing-I",1,[50,90,100]],["CDing-II",2,[46,70,90,100,120,150]],["CDing-Metal",4,[60]],["CDpower",2,[110]],["CV-II",2,[74]],["D",1,[60,90,100,120,180]],["Dela",1,[46]],["DJ Metal",4,[54]],["DJ1",1,[60]],["DJ2",2,[46,70,74,90,150]],["DS",1,[46]],["DS-X",1,[100]],["ED",1,[60]],["Endless EC1",1,[1]],["Endless EC3",1,[3]],["Ferric",1,[60,90]],["Golden SD",2,[60]],["Hello Kitty",1,[46]],["HX",2,[60]],["HX-S",2,[60]],["HXS",2,[90]],["IF (AR)",1,[46]],["IF You Say Yes",1,[46]],["Instant Starting D",1,[60]],["J",1,[60]],["KR",2,[90]],["MA",4,[46,50,60,90,100,110]],["MA-R",4,[60,90]],["MA-R MK1",4,[46]],["MA-R MK2",4,[46]],["MA-R Special Sound Classic MT241",4,[46]],["MA-X",4,[46,90,100]],["MA-XG",4,[90]],["MA-XG Fermo",4,[60]],["Maverick M",1,[90]],["ME Pro",1,[90]],["O2",2,[70,90]],["O4",4,[50]],["OD-C",1,[60,90]],["SA",2,[60,90,100]],["SA Black Limited",2,[90]],["SA Del Sol Limited Edition",2,[90]],["SA Limited Edition",2,[90]],["SA Pioneer",2,[60]],["SA-X",2,[46,54,60,90,100]],["SA-X Limited",2,[100]],["SA-XG",2,[90]],["SA-XS",2,[90]],["SD",2,[60,90,120]],["SF",2,[46,90,100]],["SM Pro",2,[90]],["SM-X Pro",2,[90]],["SR",2,[46]],["SR-X",2,[46]],["Super CDing",2,[90]],["Super CDing-IV",2,[60]],["Super D",2,[90]],["Synchro Cassette",1,[60]],["T1",1,[60]]],"Teac":[["C",1,[90]],["CDX",1,[60,90,100]],["Cobalt",2,[52]],["CRC",1,[60]],["HDX",2,[90]],["MDX",4,[90]],["Mirror Bowl",1,[52]],["Open Cassette NT",1,[50]],["Sound",1,[46,52]],["Studio",4,[52]],["Studio X",4,[46]]],"Technics":[["Angrom",2,[90]],["Concise Component",2,[50]],["RT LN",1,[60,90]],["RT MX",4,[60]],["RT XA",2,[60]],["RT XA II",1,[90]],["RT XD",1,[60]]],"Telefunken":[["C",1,[30,60,90]]],"Thats":[["AS1",1,[90,100]],["AS4",4,[100]],["CD",1,[74,90]],["CD-II",2,[90,100]],["CD-IIF",2,[90]],["CD-IV",4,[90]],["CD-IVF",4,[90]],["CD-IVS",4,[70]],["CD-MH",2,[74,100]],["EM",2,[60]],["EM-X",2,[90]],["EM-XP",2,[90]],["EVE",1,[46,60]],["EX",2,[46]],["FM",1,[60]],["FX",1,[90]],["MG-A",4,[60]],["MG-X",4,[90,100]],["MR-X Pro",4,[60,90,100]],["Ph I",1,[90]],["Ph II",2,[90]],["Ph IV",4,[90]],["Q",2,[90]],["RX",1,[46,100]],["RX-A",1,[100]],["Suono",4,[46]],["TX",1,[90]],["VX",2,[90]],["VX-A",2,[90]]],"Thomsun":[["ENB",1,[60]],["UD1",1,[60]]],"Thorens":[["Super LN",1,[60]]],"TnB":[["Chrome CC",2,[90]],["Ferro CN",1,[60]],["Position CRO2 CC",2,[60]]],"Toshiba":[["Bombeat FS",1,[60]],["Bombeat KS",1,[60]],["Bombeat MS",1,[60]],["Bombeat TS",1,[60]],["C",1,[30,90]],["C AX",1,[60]],["C FH",1,[60]],["C FS",1,[60]],["C T",1,[30,60,90]]],"Track":[["1",1,[60]],["2",2,[80]]],"Unitra":[["Kaseta Demonstracyjna",1,[30]]],"Universum":[["C",1,[60,120]],["Chromdioxid",2,[60,90]],["Chromdioxid II",2,[90]],["Chromdioxid II Special",2,[90]],["Chromdioxid UCX-II",1,[90]],["Ferro I",1,[90]],["Ferrochrom Super Professional",3,[60]],["Hi-Fi Low Noise",1,[60,90]],["Hi-Fi Super Low Noise",1,[60]],["Low Noise",1,[45,90]],["Low Noise Super",1,[90]],["Super",1,[60]],["Super Dynamic",1,[60,90,120]],["Superchrom CR II-S",2,[60]],["Superferro UFX I-S",1,[60,90]]],"Video":[["Dragor C",1,[60]]],"Waltham":[["Chromdioxid",2,[90]]],"Watson":[["C",1,[60]],["Chrome",2,[90]]],"Wellton":[["Super Ferro I",1,[60]]],"Yamaha":[["Music RX",1,[90]],["Studio EX",2,[46]]],"Zeepa":[["Professional Cassette",1,[60]]],"Zenith":[["HR",1,[60]]],"ZWN":[["PZN C",1,[60]]],"ZZZ":[["ZD",1,[60,90]]]};
   var TYPE_LABEL = {1:"Type I",2:"Type II",3:"Type III",4:"Type IV"};
+  var OTHER = "__other__";
   var byId = function(id){ return document.getElementById(id); };
-  var brandInput=byId("brand"), modelInput=byId("model"), modelList=byId("modelList"),
+  var brandSel=byId("brandSel"), modelSel=byId("modelSel"),
+      brandInput=byId("brand"), modelInput=byId("model"),
       lenSel=byId("len"), typeSel=byId("type");
-  var LOWER={};
-  Object.keys(TAPE_DB).forEach(function(b){ LOWER[b.toLowerCase()]=b; });
 
-  function currentBrand(){
-    return LOWER[brandInput.value.trim().toLowerCase()] || null;
+  function fire(el){
+    el.dispatchEvent(new Event("input"));
+    el.dispatchEvent(new Event("change"));
   }
-  function fillModelList(){
-    var b=currentBrand();
-    modelList.innerHTML="";
-    if(!b) return;
-    TAPE_DB[b].forEach(function(m){
-      var o=document.createElement("option");
-      o.value=m[0];
-      var bits=[];
-      if(m[1]) bits.push(TYPE_LABEL[m[1]]);
-      if(m[2].length) bits.push(m[2].map(function(d){return "C"+d;}).join("/"));
-      if(bits.length) o.label=bits.join(" \u00b7 ");
-      modelList.appendChild(o);
-    });
+  function opt(sel,val,text){
+    var o=document.createElement("option");
+    o.value=val; o.textContent=text;
+    sel.appendChild(o);
+  }
+  function modelInfo(m){
+    var bits=[];
+    if(m[1]) bits.push(TYPE_LABEL[m[1]]);
+    if(m[2].length) bits.push(m[2].map(function(d){return "C"+d;}).join("/"));
+    return bits.length ? m[0]+" \u2014 "+bits.join(" \u00b7 ") : m[0];
   }
   function setSelect(sel,val){
     for(var i=0;i<sel.options.length;i++){
@@ -854,20 +852,75 @@
     }
     return false;
   }
-  function autofill(){
-    var b=currentBrand(); if(!b) return;
-    var mv=modelInput.value.trim().toLowerCase(); if(!mv) return;
+  function knownBrand(name){
+    var t=name.trim().toLowerCase(), hit=null;
+    Object.keys(TAPE_DB).forEach(function(b){ if(b.toLowerCase()===t) hit=b; });
+    return hit;
+  }
+  function autofill(brand,model){
+    var list=TAPE_DB[brand]; if(!list) return;
+    var mv=model.trim().toLowerCase(); if(!mv) return;
     var hit=null;
-    TAPE_DB[b].forEach(function(m){ if(m[0].toLowerCase()===mv) hit=m; });
+    list.forEach(function(m){ if(m[0].toLowerCase()===mv) hit=m; });
     if(!hit) return;
     if(hit[1]) setSelect(typeSel, TYPE_LABEL[hit[1]]);
     if(hit[2].length===1) setSelect(lenSel, "C"+hit[2][0]);
   }
-  brandInput.addEventListener("input",fillModelList);
-  brandInput.addEventListener("change",fillModelList);
-  modelInput.addEventListener("input",autofill);
-  modelInput.addEventListener("change",autofill);
-  fillModelList();
+  function buildModels(brand){
+    var list=brand ? TAPE_DB[brand] : null;
+    modelSel.innerHTML="";
+    if(list && list.length){
+      opt(modelSel,"","\u2014 choose model \u2014");
+      list.forEach(function(m){ opt(modelSel,m[0],modelInfo(m)); });
+      opt(modelSel,OTHER,"Other\u2026");
+      modelSel.style.display="";
+      modelInput.style.display="none";
+    } else {
+      modelSel.style.display="none";
+      modelInput.style.display="";
+    }
+    if(modelInput.value){ modelInput.value=""; fire(modelInput); }
+  }
+
+  brandSel.innerHTML="";
+  opt(brandSel,"","\u2014 choose brand \u2014");
+  Object.keys(TAPE_DB).forEach(function(b){ opt(brandSel,b,b); });
+  opt(brandSel,OTHER,"Other\u2026");
+
+  brandSel.addEventListener("change",function(){
+    if(brandSel.value===OTHER){
+      brandInput.style.display="";
+      brandInput.value=""; fire(brandInput);
+      buildModels(null);
+      brandInput.focus();
+      return;
+    }
+    brandInput.style.display="none";
+    brandInput.value=brandSel.value; fire(brandInput);
+    buildModels(brandSel.value);
+  });
+
+  // typed brand (Other mode): if it matches a known brand, bring its model list up
+  brandInput.addEventListener("input",function(){
+    if(brandSel.value!==OTHER) return;
+    var hit=knownBrand(brandInput.value);
+    if(hit) buildModels(hit);
+  });
+
+  modelSel.addEventListener("change",function(){
+    if(modelSel.value===OTHER){
+      modelInput.style.display="";
+      modelInput.value=""; fire(modelInput);
+      modelInput.focus();
+      return;
+    }
+    modelInput.style.display="none";
+    modelInput.value=modelSel.value; fire(modelInput);
+    var b = brandSel.value===OTHER ? knownBrand(brandInput.value) : brandSel.value;
+    if(b && modelSel.value) autofill(b,modelSel.value);
+  });
+
+  buildModels(null);
 })();
 </script>
 </body>
